@@ -1,0 +1,261 @@
+﻿@model u22565991_HW03.Models.CombinedViewModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<style>
+    body {
+        margin: 0;
+        padding-top: 90px;
+        padding-bottom: 20px;
+        font-family: Calibri;
+    }
+
+    .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background-color: #012347;
+        height: 100px;
+        z-index: 100;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+
+        .navbar .icon {
+            float: left;
+            margin: 10px 20px;
+            color: #fff;
+            font-size: 50px;
+        }
+
+        .navbar .brand {
+            float: left;
+            margin: 24px 0;
+            margin-right: 50px;
+            color: #fff;
+            font-size: 40px;
+        }
+
+    .nav-links {
+        float: right;
+        margin: 30px 50px;
+        font-size: 20px;
+    }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 30px;
+        }
+    .bigContainer {
+        border: thin;
+    }
+
+    .container {
+        display: flex;
+        gap: 20px;
+        margin-left: 500px;
+        max-width: 550px;
+    }
+
+        .container > div {
+            flex: 1;
+            padding: 10px;
+            margin: 10px;
+        }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    th, td {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 22px;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    h1 {
+        font-size: 50px;
+    }
+    .btn {
+        display: inline-block;
+        font-weight: 400;
+        color: #212529;
+        text-align: center;
+        vertical-align: middle;
+        user-select: none;
+        background-color: #007bff;
+        border: 1px solid transparent;
+        padding: 10px;
+        font-size: 1.5rem;
+        line-height: 1.5;
+        border-radius: .25rem;
+        margin-bottom: 20px;
+        margin-left: 500px;
+        color: #fff;
+    }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+    .pagination {
+        margin-top: 20px;
+    }
+
+        .pagination a {
+            padding: 8px 16px;
+            text-decoration: none;
+            color: #007bff;
+            border: 1px solid #007bff;
+            margin: 0 6px;
+        }
+
+            .pagination a.active {
+                background-color: #007bff;
+                color: #fff;
+            }
+    .FileSave {
+        margin-top: 170px;
+        margin-left: 950px;
+    }
+
+    .report-form {
+        margin-top: 20px;
+        text-align: center;
+    }
+
+    .form-input {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        margin-bottom: 10px;
+    }
+
+    .form-select {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .btn-save {
+        display: inline-block;
+        font-weight: 400;
+        color: #fff;
+        text-align: center;
+        vertical-align: middle;
+        user-select: none;
+        background-color: #007bff;
+        border: 1px solid transparent;
+        padding: 10px 20px;
+        font-size: 13px;
+        line-height: 1.5;
+        border-radius: .25rem;
+        margin-top: 15px;
+        margin-bottom: 20px;
+    }
+
+        .btn-save:hover {
+            background-color: #0056b3;
+        }
+
+    .description {
+        margin-left: 1050px;
+        margin-top: -400px;
+        max-width: 430px;
+    }
+</style>
+<html>
+
+<head>
+    <title>Report</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="navbar">
+        <span class="icon">💻📚</span>
+        <span class="brand">Library</span>
+        <div class="nav-links">
+            <a href="@Url.Action("Home", "Home")">Home</a>
+            <a href="@Url.Action("Maintain", "Home")">Maintain</a>
+            <a href="@Url.Action("Report", "Home")">Report</a>
+        </div>
+    </div>
+    <div class="bigContainer">
+        <h1 align="center">Report (Student Borrowing Ranking)</h1>
+        <h2 align="center">Pie Chart depicting Student Borrowing Ranking by Student ID Number</h2>
+        <div class="container">
+            <canvas id="studentBorrowingChart" width="50" height="200"></canvas>
+        </div>
+    </div>
+    <div class="description">
+        <p>
+            This pie chart ranks students by the number of books borrowed within a certain timeframe.
+            This could be used for recognizing the most avid readers or identifying students who might need additional resources.
+            <br /><br />
+            Hover over each section to see the exact number of books read by each student
+        </p>
+    </div>
+    <div class="FileSave">
+        <form method="post" action="@Url.Action("SaveReport", "Home")" class="report-form">
+            <b><label for="filename">Filename:</label></b>
+            <input type="text" id="filename" name="filename" required class="form-input">
+            &nbsp;
+            <b><label for="filetype">File Type:</label></b>
+            <select id="filetype" name="filetype" required class="form-select">
+                <option value="pdf">PDF</option>
+                <option value="csv">CSV</option>
+            </select>
+            &nbsp;&nbsp;&nbsp;
+            <button type="submit" class="btn-save">Save Report</button>
+        </form>
+    </div>
+
+    <script>
+        var ctx = document.getElementById('studentBorrowingChart').getContext('2d');
+        var data = @Html.Raw(Json.Encode(Model.StudentBorrowingData));
+
+        var studentNames = data.map(x => x.StudentId);
+        var borrowingCounts = data.map(x => x.BorrowCount);
+
+        var chart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: studentNames,
+                datasets: [{
+                    label: 'Number of Books Borrowed',
+                    data: borrowingCounts,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            }
+        });
+    </script>
+
+
+</body>
+</html>

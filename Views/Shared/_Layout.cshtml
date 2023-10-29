@@ -1,0 +1,73 @@
+﻿<!DOCTYPE html>
+<style>
+    body {
+        padding-bottom: 20px;
+    }
+
+    .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background-color: #012347;
+        height: 100px;
+        z-index: 100;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+
+        .navbar .icon {
+            float: left;
+            margin: 10px 20px;
+            color: #fff;
+            font-size: 50px;
+        }
+
+        .navbar .brand {
+            float: left;
+            margin: 24px 0;
+            margin-right: 50px;
+            color: #fff;
+            font-size: 40px;
+        }
+
+    .nav-links {
+        float: right;
+        margin: 30px 70px;
+        font-size: 20px;
+        margin-top: 40px;
+    }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 30px;
+        }
+</style>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div class="navbar">
+        <span class="icon">💻📚</span>
+        <span class="brand">Library</span>
+        <div class="nav-links">
+            <a href="@Url.Action("Home", "Home")">Home</a>
+            <a href="@Url.Action("Maintain", "Home")">Maintain</a>
+            <a href="@Url.Action("Report", "Home")">Report</a>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

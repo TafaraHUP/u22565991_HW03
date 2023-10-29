@@ -1,0 +1,212 @@
+﻿@model u22565991_HW03.Models.CombinedViewModel
+@using PagedList.Mvc;
+
+<style>
+    body {
+        margin: 0;
+        padding-top: 120px;
+        padding-bottom: 20px;
+    }
+    .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background-color: #012347;
+        height: 100px;
+        z-index: 100;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+
+        .navbar .icon {
+            float: left;
+            margin: 10px 20px;
+            color: #fff;
+            font-size: 50px;
+        }
+
+        .navbar .brand {
+            float: left;
+            margin: 24px 0;
+            margin-right: 50px;
+            color: #fff;
+            font-size: 40px;
+        }
+
+    .nav-links {
+        float: right;
+        margin: 30px 70px;
+        font-size: 20px;
+        margin-top: 40px;
+    }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 30px;
+        }
+
+    .container {
+        display: flex;
+        gap: 20px;
+        margin-left: 0;
+    }
+
+        .container > div {
+            flex: 1;
+            padding: 10px;
+            margin: 10px;
+        }
+
+    table {
+        border-collapse: collapse;
+        width: 100%; 
+        margin-top: 20px;
+    }
+
+    th, td {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 22px; 
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    .btn {
+        display: inline-block;
+        font-weight: 400;
+        color: #212529;
+        text-align: center;
+        vertical-align: middle;
+        user-select: none;
+        background-color: #007bff;
+        border: 1px solid transparent;
+        padding: 10px; 
+        font-size: 1.5rem;
+        line-height: 1.5;
+        border-radius: .25rem;
+        margin-bottom: 20px;
+        margin-left: 500px;
+        color: #fff;
+    }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+    .pagination {
+        margin-top: 20px; 
+    }
+
+        .pagination a {
+            padding: 8px 16px;
+            text-decoration: none;
+            color: #007bff;
+            border: 1px solid #007bff;
+            margin: 0 6px; 
+        }
+
+            .pagination a.active {
+                background-color: #007bff;
+                color: #fff;
+            }
+</style>
+<body>
+    <div class="container">
+        <div>
+            <h2>Students</h2>
+            @Html.ActionLink("Create", "Create", "students", null, new { @class = "btn btn-primary" })
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Surname</th>
+                    <th>Birth Date</th>
+                    <th>Gender</th>
+                    <th>Class</th>
+                    <th>Point</th>
+                </tr>
+                @foreach (var item in Model.Students)
+                {
+                    <tr>
+                        <td>@item.name</td>
+                        <td>@item.surname</td>
+                        <td>@item.birthdate</td>
+                        <td>@item.gender</td>
+                        <td>@(item.@class)</td>
+                        <td>@item.point</td>
+                    </tr>
+                }
+            </table>
+            <div class="pagination">
+                Page @(Model.Students.PageCount < Model.Students.PageNumber ? 0 : Model.Students.PageNumber) of @Model.Students.PageCount
+                @if (Model.Students.HasPreviousPage)
+                {
+                    @Html.ActionLink("<<", "Home", new { page = 1 })
+                    @Html.Raw(" ");
+                    @Html.ActionLink("< Prev", "Home", new { page = Model.Students.PageNumber - 1 })
+                }
+                @if (Model.Students.HasNextPage)
+                {
+                    @Html.ActionLink("Next >", "Home", new { page = Model.Students.PageNumber + 1 })
+                    @Html.Raw(" ");
+                    @Html.ActionLink(">>", "Home", new { page = Model.Students.PageCount })
+                }
+            </div>
+        </div>
+
+        <div>
+            <h2>Books</h2>
+            @Html.ActionLink("Create", "Create", "books", null, new { @class = "btn btn-primary" })
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Page Count</th>
+                    <th>Point</th>
+                    <th>Authour ID</th>
+                    <th>Type ID</th>
+                    <th>Status</th>
+                </tr>
+                @for (int i = 0; i < Model.Books.Count(); i++)
+                {
+                    var book = Model.Books.ElementAt(i);
+                    var borrow = Model.Borrows.ElementAt(i);
+                    <tr>
+                        <td>@book.name</td>
+                        <td>@book.pagecount</td>
+                        <td>@book.point</td>
+                        <td>@book.authorId</td>
+                        <td>@book.typeId</td>
+                        <td>
+                            @if (borrow.broughtDate != null)
+                            {
+                                <text>Available</text>
+                            }
+                            else
+                            {
+                                <text>Out</text>
+                            }
+                        </td>
+                    </tr>
+                }
+            </table>
+
+            <div class="pagination">
+                Page @(Model.Books.PageCount < Model.Books.PageNumber ? 0 : Model.Books.PageNumber) of @Model.Books.PageCount
+                @if (Model.Books.HasPreviousPage)
+                {
+                    @Html.ActionLink("<<", "Home", new { page = 1 })
+                    @Html.Raw(" ");
+                    @Html.ActionLink("< Prev", "Home", new { page = Model.Books.PageNumber - 1 })
+                }
+                @if (Model.Books.HasNextPage)
+                {
+                    @Html.ActionLink("Next >", "Home", new { page = Model.Books.PageNumber + 1 })
+                    @Html.Raw(" ");
+                    @Html.ActionLink(">>", "Home", new { page = Model.Books.PageCount })
+                }
+            </div>
+        </div>
+    </div>
+</body>

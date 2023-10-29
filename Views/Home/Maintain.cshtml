@@ -1,0 +1,246 @@
+﻿@model u22565991_HW03.Models.CombinedViewModel
+@using PagedList.Mvc;
+
+<style>
+    body {
+        margin: 0;
+        padding-top: 120px;
+        padding-bottom: 20px;
+    }
+
+    .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        background-color: #012347;
+        height: 100px;
+        z-index: 100;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+
+        .navbar .icon {
+            float: left;
+            margin: 10px 20px;
+            color: #fff;
+            font-size: 50px;
+        }
+
+        .navbar .brand {
+            float: left;
+            margin: 24px 0;
+            margin-right: 50px;
+            color: #fff;
+            font-size: 40px;
+        }
+
+    .nav-links {
+        float: right;
+        margin: 30px 70px;
+        font-size: 20px;
+        margin-top: 40px;
+    }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 30px;
+        }
+
+    .container {
+        display: flex;
+        gap: 20px;
+        margin-left: -50px;
+    }
+
+        .container > div {
+            flex: 1;
+            padding: 10px;           
+            margin: 10px;
+        }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    th, td {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 18px;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+
+    h2 {
+        margin-bottom: -45px;
+    }
+
+    .btn {
+        display: inline-block;
+        font-weight: 400;
+        color: #212529;
+        text-align: center;
+        vertical-align: middle;
+        user-select: none;
+        background-color: #007bff;
+        border: 1px solid transparent;
+        padding: 10px;
+        font-size: 1.5rem;
+        line-height: 1.5;
+        border-radius: .25rem;
+        margin-bottom: 20px;
+        margin-left: 380px;
+        color: #fff;
+    }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+    .pagination {
+        margin-top: 20px;
+    }
+
+        .pagination a {
+            padding: 8px 16px;
+            text-decoration: none;
+            color: #007bff;
+            border: 1px solid #007bff;
+            margin: 0 6px;
+        }
+
+            .pagination a.active {
+                background-color: #007bff;
+                color: #fff;
+            }
+
+    .CRUD {
+        padding: 24px;
+    }
+</style>
+<body>
+    <div class="container">
+        <div>
+            <h2>Authors</h2>
+            @Html.ActionLink("Create", "Create", "authors", null, new { @class = "btn btn-primary" })
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>Surname</th>
+                    <th>CRUD</th>
+                </tr>
+                @foreach (var item in Model.Authors)
+                {
+            <tr>
+                <td>@item.name</td>
+                <td>@item.surname</td>
+                <td>
+                    <button><a href="@Url.Action("Edit", "authors", new { id = item.authorId })">Update</a></button>
+                    <button><a href="@Url.Action("Delete", "authors", new { id = item.authorId })">Delete</a></button>
+                    <button><a href="@Url.Action("Create", "authors", new { id = item.authorId })">Create</a></button>
+                </td>
+            </tr>
+                }
+            </table>
+            <div class="pagination">
+                Page @(Model.Authors.PageCount < Model.Authors.PageNumber ? 0 : Model.Authors.PageNumber) of @Model.Authors.PageCount
+                @if (Model.Authors.HasPreviousPage)
+                {
+                    @Html.ActionLink("<<", "Maintain", new { page = 1 })
+                    @Html.Raw(" ");
+                    @Html.ActionLink("< Prev", "Maintain", new { page = Model.Authors.PageNumber - 1 })
+                }
+                @if (Model.Authors.HasNextPage)
+                {
+                    @Html.ActionLink("Next >", "Maintain", new { page = Model.Authors.PageNumber + 1 })
+                    @Html.Raw(" ");
+                    @Html.ActionLink(">>", "Maintain", new { page = Model.Authors.PageCount })
+                }
+            </div>
+        </div>
+
+        <div>
+            <h2>Types</h2>
+            @Html.ActionLink("Create", "Create", "types", null, new { @class = "btn btn-primary" })
+            <table>
+                <tr>
+                    <th>Name</th>
+                    <th>CRUD</th>
+                </tr>
+                @foreach (var listItem in Model.Types)
+                {
+            <tr>
+                <td>@listItem.name</td>
+                <td>
+                    <button><a href="@Url.Action("Edit", "types", new { id = listItem.typeId })">Update</a></button>
+                    <button><a href="@Url.Action("Delete", "types", new { id = listItem.typeId })">Delete</a></button>
+                    <button><a href="@Url.Action("Create", "types", new { id = listItem.typeId })">Create</a></button>
+                </td>
+            </tr>
+                }
+            </table>
+            <div class="pagination">
+                Page @(Model.Types.PageCount < Model.Types.PageNumber ? 0 : Model.Types.PageNumber) of @Model.Types.PageCount
+                @if (Model.Types.HasPreviousPage)
+                {
+                    @Html.ActionLink("<<", "Maintain", new { page = 1 })
+                    @Html.Raw(" ");
+                    @Html.ActionLink("< Prev", "Maintain", new { page = Model.Types.PageNumber - 1 })
+                }
+                @if (Model.Types.HasNextPage)
+                {
+                    @Html.ActionLink("Next >", "Maintain", new { page = Model.Types.PageNumber + 1 })
+                    @Html.Raw(" ");
+                    @Html.ActionLink(">>", "Maintain", new { page = Model.Types.PageCount })
+                }
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <h2>Borrows</h2>
+        @Html.ActionLink("Create", "Create", "borrows", null, new { @class = "btn btn-primary" })
+        <table>
+            <tr>
+                <th>Student ID</th>
+                <th>Book ID</th>
+                <th>Taken Date</th>
+                <th>Brought Date</th>
+                <th class="CRUD">CRUD</th>
+            </tr>
+            @foreach (var listItem in Model.Borrows)
+            {
+        <tr>
+            <td>@listItem.studentId</td>
+            <td>@listItem.bookId</td>
+            <td>@listItem.takenDate</td>
+            <td>@listItem.broughtDate</td>
+            <td class="CRUD">
+                <button><a href="@Url.Action("Edit", "borrows", new { id = listItem.borrowId })">Update</a></button>
+                <button><a href="@Url.Action("Delete", "borrows", new { id = listItem.borrowId })">Delete</a></button>
+                <button><a href="@Url.Action("Create", "borrows", new { id = listItem.borrowId })">Create</a></button>
+            </td>
+        </tr>
+            }
+        </table>
+        <div class="pagination">
+            Page @(Model.Borrows.PageCount < Model.Borrows.PageNumber ? 0 : Model.Borrows.PageNumber) of @Model.Borrows.PageCount
+            @if (Model.Borrows.HasPreviousPage)
+            {
+                @Html.ActionLink("<<", "Maintain", new { page = 1 })
+                @Html.Raw(" ");
+                @Html.ActionLink("< Prev", "Maintain", new { page = Model.Borrows.PageNumber - 1 })
+            }
+            @if (Model.Borrows.HasNextPage)
+            {
+                @Html.ActionLink("Next >", "Maintain", new { page = Model.Borrows.PageNumber + 1 })
+                @Html.Raw(" ");
+                @Html.ActionLink(">>", "Maintain", new { page = Model.Borrows.PageCount })
+            }
+        </div>
+    </div>
+</body>
